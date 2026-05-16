@@ -17,7 +17,7 @@ const navItems = [
   },
   {
     id: 'history',
-    label: 'Trade History',
+    label: 'Trades',
     icon: History,
   },
 ];
@@ -99,7 +99,7 @@ function NavItem({ item, isActive, collapsed, onClick, index }) {
 
 /* ── Sidebar ──────────────────────────────────────────── */
 export default function Sidebar() {
-  const { sidebarOpen, setSidebarOpen, activePage, setActivePage } = useAppStore();
+  const { sidebarOpen, setSidebarOpen, activePage, setActivePage, openTradeModal } = useAppStore();
   const hoverTimeout = useRef(null);
 
   /* Debounced hover handlers to prevent flicker */
@@ -196,7 +196,7 @@ export default function Sidebar() {
       {/* ── Add Trade Button ──────────────────────────── */}
       <div className="px-3 pb-3">
         <motion.button
-          onClick={() => setActivePage('addTrade')}
+          onClick={() => openTradeModal()}
           className={cn(
             'group flex w-full items-center gap-2 rounded-xl bg-gradient-to-r from-accent-blue/20 to-accent-green/20 px-3 py-2.5 text-sm font-semibold text-accent-blue hover:from-accent-blue/30 hover:to-accent-green/30 focus-ring cursor-pointer'
           )}

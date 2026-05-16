@@ -56,7 +56,7 @@ export default function RecentTradesCard({ trades, index = 0 }) {
                   {trade.symbol}
                 </p>
                 <p className="text-[9px] text-text-tertiary leading-tight">
-                  {trade.date} · {trade.type}
+                  {trade.date}
                 </p>
               </div>
             </div>

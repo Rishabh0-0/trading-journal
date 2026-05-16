@@ -2,7 +2,8 @@ import React from 'react';
 import useAppStore from './store/useAppStore';
 import AppLayout from './components/layout/AppLayout';
 import DashboardPage from './pages/DashboardPage';
-import TradeHistoryPage from './pages/TradeHistoryPage';
+import TradesPage from './pages/TradesPage';
+import AddTradeModal from './components/modals/AddTradeModal';
 
 /**
  * Root App component.
@@ -16,18 +17,18 @@ export default function App() {
       case 'dashboard':
         return <DashboardPage />;
       case 'history':
-        return <TradeHistoryPage />;
-      case 'addTrade':
-        // Will be a modal in Phase 5, placeholder for now
-        return <DashboardPage />;
+        return <TradesPage />;
       default:
         return <DashboardPage />;
     }
   };
 
   return (
-    <AppLayout >
-      {renderPage()}
-    </AppLayout>
+    <>
+      <AppLayout>
+        {renderPage()}
+      </AppLayout>
+      <AddTradeModal />
+    </>
   );
 }

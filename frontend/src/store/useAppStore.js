@@ -2,7 +2,7 @@ import { create } from 'zustand';
 
 /**
  * Global application store using Zustand.
- * Keeps sidebar state and active navigation.
+ * Keeps sidebar state, active navigation, and modal state.
  */
 const useAppStore = create((set) => ({
   // Sidebar
@@ -13,6 +13,12 @@ const useAppStore = create((set) => ({
   // Active page / route
   activePage: 'dashboard',
   setActivePage: (page) => set({ activePage: page }),
+
+  // Trade Modal
+  tradeModalOpen: false,
+  tradeModalPrefill: null, // { symbol, strategy, entryPrice, size } for averaging
+  openTradeModal: (prefill = null) => set({ tradeModalOpen: true, tradeModalPrefill: prefill }),
+  closeTradeModal: () => set({ tradeModalOpen: false, tradeModalPrefill: null }),
 }));
 
 export default useAppStore;

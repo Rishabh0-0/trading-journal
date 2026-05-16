@@ -24,6 +24,7 @@ export default function AppLayout({ children }) {
 
         <main className="flex-1 overflow-y-auto p-6">
           <motion.div
+            className="h-full flex flex-col"
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.35, ease: 'easeOut' }}
