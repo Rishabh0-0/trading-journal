@@ -4,34 +4,23 @@ import { cn } from '../../lib/utils';
 
 /**
  * Skeleton loader that matches StatCard dimensions.
- * Shows a pulsing placeholder while data loads.
  */
 export function StatCardSkeleton() {
   return (
-    <div className="card-base p-5 space-y-3 animate-pulse">
+    <div className="card-base p-4 space-y-2 animate-pulse">
       <div className="flex items-center justify-between">
-        <div className="h-4 w-24 rounded-md bg-bg-tertiary" />
-        <div className="h-9 w-9 rounded-xl bg-bg-tertiary" />
+        <div className="h-3 w-20 rounded bg-bg-tertiary" />
+        <div className="h-7 w-7 rounded-lg bg-bg-tertiary" />
       </div>
-      <div className="h-8 w-32 rounded-md bg-bg-tertiary" />
-      <div className="h-3 w-20 rounded-md bg-bg-tertiary" />
+      <div className="h-6 w-28 rounded bg-bg-tertiary" />
+      <div className="h-3 w-16 rounded bg-bg-tertiary" />
     </div>
   );
 }
 
 /**
- * Reusable stat card component.
- *
- * @param {string}  title       - Card title label
- * @param {string}  value       - Main display value (pre-formatted)
- * @param {string}  subtitle    - Small text below value (optional)
- * @param {number}  change      - Percentage change (+/-), null to hide
- * @param {string}  changePeriod - Period label for change (e.g. "vs last month")
- * @param {React.ElementType} icon - Lucide icon component
- * @param {string}  iconColor   - Tailwind text color class for icon
- * @param {string}  iconBg      - Tailwind bg color class for icon container
- * @param {'positive'|'negative'|'neutral'} sentiment - Controls value color
- * @param {number}  index       - Index for staggered animation
+ * Reusable stat card with icon, value, change badge.
+ * Uses flex-col + justify-between to fill grid row height.
  */
 export default function StatCard({
   title,
@@ -50,7 +39,7 @@ export default function StatCard({
 
   return (
     <motion.div
-      className="card-base group relative overflow-hidden p-5"
+      className="card-base group relative overflow-hidden p-4 h-full flex flex-col justify-between"
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{
@@ -70,21 +59,21 @@ export default function StatCard({
         )}
       />
 
-      {/* Top row: label + icon */}
-      <div className="flex items-center justify-between mb-3">
-        <span className="text-xs font-medium uppercase tracking-wider text-text-tertiary">
+      {/* Top: Label + Icon */}
+      <div className="flex items-center justify-between mb-1.5">
+        <span className="text-[10px] font-bold uppercase tracking-wider text-text-tertiary">
           {title}
         </span>
-        <div className={cn('flex h-9 w-9 items-center justify-center rounded-xl', iconBg)}>
-          <Icon size={18} className={iconColor} strokeWidth={1.8} />
+        <div className={cn('flex h-7 w-7 items-center justify-center rounded-lg', iconBg)}>
+          <Icon size={14} className={iconColor} strokeWidth={2} />
         </div>
       </div>
 
-      {/* Main value */}
-      <div className="mb-1">
+      {/* Middle: Value */}
+      <div className="mb-0.5">
         <span
           className={cn(
-            'text-2xl font-bold tracking-tight',
+            'text-xl font-bold tracking-tight',
             sentiment === 'positive' && 'text-accent-green',
             sentiment === 'negative' && 'text-accent-red',
             sentiment === 'neutral' && 'text-text-primary',
@@ -94,12 +83,12 @@ export default function StatCard({
         </span>
       </div>
 
-      {/* Change badge + subtitle */}
-      <div className="flex items-center gap-2">
+      {/* Bottom: Change badge + subtitle */}
+      <div className="flex items-center justify-between gap-2">
         {change != null && (
           <span
             className={cn(
-              'inline-flex items-center gap-0.5 rounded-md px-1.5 py-0.5 text-[11px] font-semibold',
+              'inline-flex items-center gap-0.5 rounded-md px-1.5 py-0.5 text-[10px] font-bold',
               isPositive && 'bg-accent-green/10 text-accent-green',
               isNegative && 'bg-accent-red/10 text-accent-red',
               !isPositive && !isNegative && 'bg-bg-tertiary text-text-tertiary',
@@ -110,7 +99,7 @@ export default function StatCard({
           </span>
         )}
         {(subtitle || changePeriod) && (
-          <span className="text-[11px] text-text-tertiary">
+          <span className="text-[10px] text-text-tertiary truncate">
             {subtitle || changePeriod}
           </span>
         )}
