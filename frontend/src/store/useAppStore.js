@@ -6,7 +6,7 @@ import { create } from 'zustand';
  */
 const useAppStore = create((set) => ({
   // Sidebar
-  sidebarOpen: true,
+  sidebarOpen: false,
   toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
   setSidebarOpen: (open) => set({ sidebarOpen: open }),
 
