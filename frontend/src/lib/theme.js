@@ -2,50 +2,51 @@
  * Theme tokens / design system constants.
  * Centralizes all color, spacing, and animation values
  * so the entire app maintains visual consistency.
+ * 
+ * Note: These values are synced with src/index.css
  */
 
 export const theme = {
   colors: {
     // Backgrounds
     bg: {
-      primary: '#0a0a0f',      // near-black base
-      secondary: '#111118',    // card backgrounds
-      tertiary: '#16161f',     // elevated surfaces
-      sidebar: '#0d0d14',      // sidebar background
-      hover: '#1a1a25',        // hover states
-      input: '#13131c',        // input fields
+      primary: '#FFFBF1',      // page base
+      secondary: '#FFFFFF',    // card backgrounds
+      tertiary: '#F5F2EA',     // elevated surfaces
+      sidebar: '#FFFFFF',      // sidebar background
+      hover: '#F9F6EE',        // hover states
+      input: '#FFFFFF',        // input fields
     },
     // Accent colors
     accent: {
-      blue: '#00d4ff',         // neon cyan-blue
-      blueMuted: '#00d4ff20',  // blue glow
-      green: '#00e68a',        // emerald green (profit)
-      greenMuted: '#00e68a20', // green glow
-      red: '#ff4757',          // loss red
-      redMuted: '#ff475720',   // red glow
-      purple: '#a78bfa',       // secondary accent
-      amber: '#fbbf24',        // warning / neutral
+      blue: '#2563EB',         
+      blueMuted: '#2563EB15',  
+      green: '#10B981',        
+      greenMuted: '#10B98115', 
+      red: '#EF4444',          
+      redMuted: '#EF444415',   
+      purple: '#8B5CF6',       
+      amber: '#F59E0B',        
     },
     // Text
     text: {
-      primary: '#f0f0f5',      // primary text
-      secondary: '#8b8b9e',    // muted text
-      tertiary: '#5a5a6e',     // disabled / placeholder
+      primary: '#1A1A1A',      // primary text
+      secondary: '#64748B',    // muted text
+      tertiary: '#94A3B8',     // disabled / placeholder
     },
     // Borders
     border: {
-      default: '#1e1e2e',      // subtle borders
-      hover: '#2a2a3e',        // hover borders
-      glow: '#00d4ff30',       // glowing borders
+      default: '#E2E8F0',      // subtle borders
+      hover: '#CBD5E1',        // hover borders
+      glow: '#2563EB20',       // glowing borders
     },
   },
 
   // Box shadow presets
   shadows: {
-    card: '0 0 0 1px rgba(30, 30, 46, 0.5), 0 4px 24px rgba(0, 0, 0, 0.4)',
-    cardHover: '0 0 0 1px rgba(0, 212, 255, 0.2), 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 212, 255, 0.05)',
-    glow: '0 0 20px rgba(0, 212, 255, 0.15)',
-    glowGreen: '0 0 20px rgba(0, 230, 138, 0.15)',
+    card: '0 4px 20px rgba(0, 0, 0, 0.04)',
+    cardHover: '0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.08)',
+    glow: '0 0 15px rgba(37, 99, 235, 0.1)',
   },
 
   // Animation durations

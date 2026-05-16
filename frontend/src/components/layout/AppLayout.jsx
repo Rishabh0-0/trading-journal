@@ -13,16 +13,16 @@ export default function AppLayout({ children }) {
   const { sidebarOpen } = useAppStore();
 
   return (
-    <div className="flex min-h-screen bg-bg-primary bg-grid-pattern">
+    <div className="flex h-screen bg-bg-primary bg-grid-pattern p-3 gap-3 overflow-hidden">
       <Sidebar />
 
       <motion.div
-        className="flex flex-1 flex-col"
+        className="flex flex-1 flex-col overflow-hidden rounded-3xl border border-border-default bg-bg-secondary/50 backdrop-blur-sm shadow-sm"
         transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
       >
         <Header />
 
-        <main className="flex-1 overflow-y-auto p-2">
+        <main className="flex-1 overflow-y-auto p-8">
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}

@@ -22,7 +22,7 @@ export default function Header() {
   };
 
   return (
-    <header className="flex h-16 items-center justify-between border-b border-border-default bg-bg-primary/80 p-2 backdrop-blur-md">
+    <header className="flex h-16 items-center justify-between px-8 pt-4">
       <div>
         <motion.h2
           key={activePage}

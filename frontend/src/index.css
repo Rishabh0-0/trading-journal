@@ -2,34 +2,34 @@
 
 /* ═══════════════════════════════════════════════════════════
    TRADEVAULT — Design System & Base Styles
-   Premium dark trading dashboard aesthetic
+   Premium light trading dashboard aesthetic
    ═══════════════════════════════════════════════════════════ */
 
 /* ── Custom Theme Layer ─────────────────────────────────── */
 @theme {
-  --color-bg-primary: #0a0a0f;
-  --color-bg-secondary: #111118;
-  --color-bg-tertiary: #16161f;
-  --color-bg-sidebar: #0d0d14;
-  --color-bg-hover: #1a1a25;
-  --color-bg-input: #13131c;
+  --color-bg-primary: #FFFBF1;
+  --color-bg-secondary: #FFFFFF;
+  --color-bg-tertiary: #F5F2EA;
+  --color-bg-sidebar: #FFFFFF;
+  --color-bg-hover: #F9F6EE;
+  --color-bg-input: #FFFFFF;
 
-  --color-accent-blue: #00d4ff;
-  --color-accent-blue-muted: #00d4ff20;
-  --color-accent-green: #00e68a;
-  --color-accent-green-muted: #00e68a20;
-  --color-accent-red: #ff4757;
-  --color-accent-red-muted: #ff475720;
-  --color-accent-purple: #a78bfa;
-  --color-accent-amber: #fbbf24;
+  --color-accent-blue: #2563EB;
+  --color-accent-blue-muted: #2563EB15;
+  --color-accent-green: #10B981;
+  --color-accent-green-muted: #10B98115;
+  --color-accent-red: #EF4444;
+  --color-accent-red-muted: #EF444415;
+  --color-accent-purple: #8B5CF6;
+  --color-accent-amber: #F59E0B;
 
-  --color-text-primary: #f0f0f5;
-  --color-text-secondary: #8b8b9e;
-  --color-text-tertiary: #5a5a6e;
+  --color-text-primary: #1A1A1A;
+  --color-text-secondary: #64748B;
+  --color-text-tertiary: #94A3B8;
 
-  --color-border-default: #1e1e2e;
-  --color-border-hover: #2a2a3e;
-  --color-border-glow: #00d4ff30;
+  --color-border-default: #E2E8F0;
+  --color-border-hover: #CBD5E1;
+  --color-border-glow: #2563EB20;
 
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
@@ -70,18 +70,18 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #2a2a3e;
+  background: #E2E8F0;
   border-radius: 999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #3a3a4e;
+  background: #CBD5E1;
 }
 
 /* ── Selection ──────────────────────────────────────────── */
 ::selection {
-  background: #00d4ff30;
-  color: #f0f0f5;
+  background: #2563EB15;
+  color: #1A1A1A;
 }
 
 /* ── Focus Ring Utility ─────────────────────────────────── */
@@ -97,15 +97,15 @@
 
 /* ── Glow Effects ───────────────────────────────────────── */
 .glow-blue {
-  filter: drop-shadow(0 0 6px #00d4ff60);
+  filter: drop-shadow(0 0 4px #2563EB30);
 }
 
 .glow-green {
-  filter: drop-shadow(0 0 6px #00e68a60);
+  filter: drop-shadow(0 0 4px #10B98130);
 }
 
 .glow-red {
-  filter: drop-shadow(0 0 6px #ff475760);
+  filter: drop-shadow(0 0 4px #EF444430);
 }
 
 /* ── Card Base ──────────────────────────────────────────── */
@@ -118,20 +118,19 @@
 
 .card-base:hover {
   border-color: var(--color-border-hover);
-  box-shadow: 0 0 0 1px rgba(0, 212, 255, 0.08),
-    0 8px 32px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
 }
 
 /* ── Glass Effect ───────────────────────────────────────── */
 .glass {
-  background: rgba(17, 17, 24, 0.6);
+  background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
 }
 
 /* ── Gradient text ──────────────────────────────────────── */
 .text-gradient {
-  background: linear-gradient(135deg, #00d4ff, #00e68a);
+  background: linear-gradient(135deg, #2563EB, #10B981);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -148,7 +147,7 @@
 
 /* ── Subtle Background Gradient ─────────────────────────── */
 .bg-grid-pattern {
-  background-image:
-    radial-gradient(circle at 20% 50%, rgba(0, 212, 255, 0.03) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(0, 230, 138, 0.02) 0%, transparent 50%);
+  background-image: 
+    radial-gradient(circle at 20% 50%, rgba(37, 99, 235, 0.02) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.02) 0%, transparent 50%);
 }

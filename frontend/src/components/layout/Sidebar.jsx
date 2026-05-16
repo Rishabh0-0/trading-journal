@@ -116,7 +116,7 @@ export default function Sidebar() {
   return (
     <motion.aside
       className={cn(
-        'relative z-40 flex h-screen flex-col border-r border-border-default bg-bg-sidebar overflow-hidden'
+        'relative z-40 flex h-full flex-col border border-border-default bg-bg-sidebar overflow-hidden rounded-3xl shadow-sm'
       )}
       animate={{ width: sidebarOpen ? 240 : 72 }}
       transition={sidebarSpring}
