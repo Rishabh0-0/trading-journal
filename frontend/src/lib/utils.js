@@ -8,3 +8,17 @@ import { twMerge } from 'tailwind-merge';
 export function cn(...inputs) {
   return twMerge(clsx(inputs));
 }
+
+/**
+ * Format a number as Indian Rupee currency.
+ * @param {number} value — The amount to format.
+ * @param {number} [decimals=0] — Maximum fraction digits.
+ */
+export function formatINR(value, decimals = 0) {
+  if (value == null) return '—';
+  return new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: 'INR',
+    maximumFractionDigits: decimals,
+  }).format(value);
+}

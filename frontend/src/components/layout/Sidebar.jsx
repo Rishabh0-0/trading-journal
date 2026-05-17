@@ -197,6 +197,7 @@ export default function Sidebar() {
       <div className="px-3 pb-3">
         <motion.button
           onClick={() => openTradeModal()}
+          aria-label="Add new trade"
           className={cn(
             'group flex w-full items-center gap-2 rounded-xl bg-gradient-to-r from-accent-blue/20 to-accent-green/20 px-3 py-2.5 text-sm font-semibold text-accent-blue hover:from-accent-blue/30 hover:to-accent-green/30 focus-ring cursor-pointer'
           )}

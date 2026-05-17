@@ -2,14 +2,9 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip } from 'recharts';
 import { cn } from '../../lib/utils';
+import { formatINR } from '../../lib/utils';
 
-const formatINR = (val) => {
-  return new Intl.NumberFormat('en-IN', {
-    style: 'currency',
-    currency: 'INR',
-    maximumFractionDigits: 0,
-  }).format(val);
-};
+
 
 function ChartTooltip({ active, payload, label }) {
   if (!active || !payload?.length) return null;
@@ -49,7 +44,7 @@ export default function EquityCurveChart({ data, index = 0 }) {
         </div>
 
         {/* Period Toggles */}
-        <div className="flex bg-bg-tertiary p-1 rounded-lg">
+        <div className="flex bg-bg-tertiary p-1 rounded-lg" role="tablist" aria-label="Time period">
           {periods.map((p) => (
             <button
               key={p}
@@ -60,6 +55,8 @@ export default function EquityCurveChart({ data, index = 0 }) {
                   ? "bg-bg-secondary text-text-primary shadow-sm"
                   : "text-text-tertiary hover:text-text-secondary"
               )}
+              role="tab"
+              aria-selected={period === p}
             >
               {p}
             </button>
@@ -68,7 +65,7 @@ export default function EquityCurveChart({ data, index = 0 }) {
       </div>
 
       {/* Chart Area */}
-      <div className="flex-1 min-h-[220px] w-full mt-2">
+      <div className="flex-1 min-h-[220px] w-full mt-2" aria-hidden="true">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={data} margin={{ top: 10, right: 0, left: 0, bottom: 0 }}>
             <defs>

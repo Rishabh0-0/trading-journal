@@ -36,8 +36,7 @@ export const statsData = {
   },
   activePositions: {
     value: 5,
-    long: 3,
-    short: 2,
+    count: 5,
   },
   // Data for Win Ratio Bar Chart
   winRatioHistory: [

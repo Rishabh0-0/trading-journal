@@ -1,15 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowUpRight, ArrowDownRight, History } from 'lucide-react';
-import { cn } from '../../lib/utils';
+import { cn, formatINR } from '../../lib/utils';
 
-const formatINR = (val) => {
-  return new Intl.NumberFormat('en-IN', {
-    style: 'currency',
-    currency: 'INR',
-    maximumFractionDigits: 0,
-  }).format(val);
-};
+
 
 /**
  * RecentTradesCard — Full-height right column card.

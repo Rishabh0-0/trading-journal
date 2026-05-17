@@ -1,15 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, Cell } from 'recharts';
-import { cn } from '../../lib/utils';
+import { formatINR } from '../../lib/utils';
 
-const formatINR = (val) => {
-  return new Intl.NumberFormat('en-IN', {
-    style: 'currency',
-    currency: 'INR',
-    maximumFractionDigits: 0,
-  }).format(val);
-};
+
 
 function StrategyTooltip({ active, payload, label }) {
   if (!active || !payload?.length) return null;
@@ -52,7 +46,7 @@ export default function StrategyPerformanceChart({ data, index = 0 }) {
         <h3 className="text-[11px] font-bold uppercase tracking-wider text-text-tertiary">Strategy Performance</h3>
       </div>
 
-      <div className="flex-1 min-h-[220px] w-full mt-2">
+      <div className="flex-1 min-h-[220px] w-full mt-2" aria-hidden="true">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={sortedData} layout="vertical" barGap={0}>
             <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="var(--color-border-default)" opacity={0.4} />

@@ -12,22 +12,14 @@ import RecentTradesCard from './RecentTradesCard';
 import EquityCurveChart from './EquityCurveChart';
 import StrategyPerformanceChart from './StrategyPerformanceChart';
 import { statsData } from '../../data/mockData';
-
-function formatINR(value) {
-  return new Intl.NumberFormat('en-IN', {
-    style: 'currency',
-    currency: 'INR',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(value);
-}
+import { formatINR } from '../../lib/utils';
 
 /**
  * Skeleton that mirrors the actual grid layout.
  */
 function GridSkeleton() {
   return (
-    <div className="flex flex-col h-full gap-6">
+    <div className="flex flex-col h-full gap-6" role="status" aria-label="Loading dashboard">
       {/* Top Grid Skeleton */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-3">
         <div className="lg:col-span-3 grid grid-cols-3 gap-3">
@@ -106,7 +98,7 @@ export default function StatsGrid() {
   } = statsData;
 
   return (
-    <div className="flex flex-col h-full gap-3">
+    <div className="flex flex-col h-full gap-3" role="region" aria-label="Dashboard statistics">
       {/* ── Top Dashboard Grid (Phase 2) ─────────────────── */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-3">
         {/* ── Left Area (3 Columns) ────────────────────────── */}
@@ -156,7 +148,7 @@ export default function StatsGrid() {
           <StatCard
             title="Active Pos"
             value={activePositions.value.toString()}
-            subtitle={`${activePositions.long}L / ${activePositions.short}S`}
+            subtitle={`${activePositions.count} positions`}
             icon={Activity}
             iconColor="text-accent-purple"
             iconBg="bg-accent-purple/10"

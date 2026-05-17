@@ -148,7 +148,7 @@ export default function AddTradeModal() {
                     </div>
                     
                     <Dialog.Close asChild>
-                      <button className="flex h-8 w-8 items-center justify-center rounded-lg text-text-tertiary hover:bg-bg-tertiary hover:text-text-primary transition-colors cursor-pointer">
+                      <button className="flex h-8 w-8 items-center justify-center rounded-lg text-text-tertiary hover:bg-bg-tertiary hover:text-text-primary transition-colors cursor-pointer" aria-label="Close dialog">
                         <X size={18} />
                       </button>
                     </Dialog.Close>
