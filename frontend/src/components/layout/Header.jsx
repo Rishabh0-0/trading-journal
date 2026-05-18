@@ -11,12 +11,12 @@ export default function Header() {
 
   const pageTitles = {
     dashboard: 'Dashboard',
-    history: 'Trades',
+    trades: 'Trades',
   };
 
   const pageDescriptions = {
     dashboard: 'Overview of your trading performance',
-    history: 'Browse and filter your trade log',
+    trades: 'Browse and filter your trade log',
   };
 
   return (

@@ -16,7 +16,7 @@ export default function App() {
     switch (activePage) {
       case 'dashboard':
         return <DashboardPage />;
-      case 'history':
+      case 'trades':
         return <TradesPage />;
       default:
         return <DashboardPage />;

@@ -2,7 +2,7 @@ import React, { useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard,
-  History,
+  ChartCandlestick,
   PlusCircle,
   CircleDollarSign,
 } from 'lucide-react';
@@ -16,9 +16,9 @@ const navItems = [
     icon: LayoutDashboard,
   },
   {
-    id: 'history',
+    id: 'trades',
     label: 'Trades',
-    icon: History,
+    icon: ChartCandlestick,
   },
 ];
 
