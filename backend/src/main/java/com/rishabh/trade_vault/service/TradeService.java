@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.rishabh.trade_vault.model.Trade;
+import com.rishabh.trade_vault.model.TradeStatus;
 import com.rishabh.trade_vault.repository.TradeRepository;
 
 @Service
@@ -21,6 +22,8 @@ public class TradeService {
     }
 
     public Trade logTrade(Trade trade) {
+        trade.setStatus(TradeStatus.ACTIVE);
+
         return tradeRepository.save(trade);
     }
 
