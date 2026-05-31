@@ -1,8 +1,11 @@
-package com.rishabh.trade_vault;
+package com.rishabh.trade_vault.service;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+
+import com.rishabh.trade_vault.model.Trade;
+import com.rishabh.trade_vault.repository.TradeRepository;
 
 @Service
 public class TradeService {

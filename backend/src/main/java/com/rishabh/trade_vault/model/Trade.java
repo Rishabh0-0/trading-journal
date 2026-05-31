@@ -1,4 +1,4 @@
-package com.rishabh.trade_vault;
+package com.rishabh.trade_vault.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

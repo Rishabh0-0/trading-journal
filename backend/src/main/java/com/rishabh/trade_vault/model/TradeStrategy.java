@@ -1,4 +1,4 @@
-package com.rishabh.trade_vault;
+package com.rishabh.trade_vault.model;
 
 public enum TradeStrategy {
     TRENDINE_BREAKOUT,
