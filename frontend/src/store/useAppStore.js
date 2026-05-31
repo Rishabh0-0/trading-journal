@@ -19,6 +19,12 @@ const useAppStore = create((set) => ({
   tradeModalPrefill: null, // { symbol, strategy, entryPrice, size } for averaging
   openTradeModal: (prefill = null) => set({ tradeModalOpen: true, tradeModalPrefill: prefill }),
   closeTradeModal: () => set({ tradeModalOpen: false, tradeModalPrefill: null }),
+
+  // Exit Trade Modal
+  exitTradeModalOpen: false,
+  exitTradeModalTrade: null,
+  openExitTradeModal: (trade) => set({ exitTradeModalOpen: true, exitTradeModalTrade: trade }),
+  closeExitTradeModal: () => set({ exitTradeModalOpen: false, exitTradeModalTrade: null }),
 }));
 
 export default useAppStore;

@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Plus, SearchX } from 'lucide-react';
+import { Plus, SearchX, X } from 'lucide-react';
 import { cn, formatINR } from '../../lib/utils';
 import useAppStore from '../../store/useAppStore';
 
@@ -24,7 +24,7 @@ const FILTERS = ['ALL', 'ACTIVE', 'PROFIT', 'LOSS'];
  */
 export default function TradesTable({ data }) {
   const [filter, setFilter] = useState('ALL');
-  const { openTradeModal } = useAppStore();
+  const { openTradeModal, openExitTradeModal } = useAppStore();
 
   // Precompute counts for filter badges
   const counts = useMemo(() => ({
@@ -161,22 +161,32 @@ export default function TradesTable({ data }) {
                     </span>
                   </td>
 
-                  {/* Action (Add Position) */}
+                  {/* Action (Add/Close Position) */}
                   <td className="p-4 text-center">
                     {trade.status === 'ACTIVE' ? (
-                      <button 
-                        className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-accent-blue-muted text-accent-blue hover:bg-accent-blue hover:text-white transition-colors cursor-pointer"
-                        aria-label={`Add position to ${trade.symbol}`}
-                        title="Add Position (Average)"
-                        onClick={() => openTradeModal({
-                          symbol: trade.symbol,
-                          strategy: trade.strategy,
-                          entryPrice: trade.entryPrice,
-                          size: trade.size,
-                        })}
-                      >
-                        <Plus size={16} strokeWidth={2.5} />
-                      </button>
+                      <div className="flex items-center justify-center gap-2">
+                        <button 
+                          className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-accent-blue-muted text-accent-blue hover:bg-accent-blue hover:text-white transition-colors cursor-pointer"
+                          aria-label={`Add position to ${trade.symbol}`}
+                          title="Add Position (Average)"
+                          onClick={() => openTradeModal({
+                            symbol: trade.symbol,
+                            strategy: trade.strategy,
+                            entryPrice: trade.entryPrice,
+                            size: trade.size,
+                          })}
+                        >
+                          <Plus size={16} strokeWidth={2.5} />
+                        </button>
+                        <button 
+                          className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-accent-red-muted text-accent-red hover:bg-accent-red hover:text-white transition-colors cursor-pointer"
+                          aria-label={`Close ${trade.symbol} position`}
+                          title="Close Position"
+                          onClick={() => openExitTradeModal(trade)}
+                        >
+                          <X size={16} strokeWidth={2.5} />
+                        </button>
+                      </div>
                     ) : (
                       <span className="text-text-tertiary" aria-hidden="true">—</span>
                     )}
