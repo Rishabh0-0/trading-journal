@@ -42,13 +42,7 @@ public class TradeController {
     @GetMapping
     public List<TradeResponseDTO> getAllTrades() {
         List<Trade> allTrades = tradeService.getAllTrades();
-        List<TradeResponseDTO> allTradeDtos = new ArrayList<>();
-
-        for (Trade t : allTrades) {
-            allTradeDtos.add(tradeMapper.toDto(t));
-        }
-
-        return allTradeDtos;
+        return allTrades.stream().map(tradeMapper::toDto).toList();
     }
 
     @PutMapping("/{id}/close")
