@@ -14,6 +14,8 @@ import com.rishabh.trade_vault.mapper.TradeMapper;
 import com.rishabh.trade_vault.model.Trade;
 import com.rishabh.trade_vault.service.TradeService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/trades")
 public class TradeController {
@@ -27,7 +29,7 @@ public class TradeController {
     }
 
     @PostMapping
-    public TradeResponseDTO logTrade(@RequestBody TradeRequestDTO requestDTO) {
+    public TradeResponseDTO logTrade(@Valid @RequestBody TradeRequestDTO requestDTO) {
         Trade newTrade = tradeMapper.toEntity(requestDTO);
         Trade savedTrade = tradeService.logTrade(newTrade);
 

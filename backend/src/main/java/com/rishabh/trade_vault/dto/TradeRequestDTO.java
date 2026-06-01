@@ -5,14 +5,19 @@ import java.time.LocalDate;
 
 import com.rishabh.trade_vault.model.TradeStrategy;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class TradeRequestDTO {
 
+    @NotBlank(message = "Symbol cannot be empty!")
     private String symbol;
 
     private TradeStrategy strategy;
 
     private LocalDate entryDate;
 
+    @NotNull(message = "Entry price is required!")
     private BigDecimal entryPrice;
 
     private Integer positionSize;
