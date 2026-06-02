@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.rishabh.trade_vault.dto.DashboardStatsDTO;
 import com.rishabh.trade_vault.dto.TradeCloseRequestDTO;
 import com.rishabh.trade_vault.model.Trade;
 import com.rishabh.trade_vault.model.TradeStatus;
@@ -52,6 +53,17 @@ public class TradeService {
         }
 
         return tradeRepository.save(trade);
+    }
+
+    public DashboardStatsDTO getDashboardStats() {
+        long totalTrades = tradeRepository.count();
+        BigDecimal totalPnl = tradeRepository.sumTotalPnl();
+        double winingTrades = tradeRepository.countByStatus(TradeStatus.CLOSED_PROFIT);
+        double closedTrades = winingTrades + tradeRepository.countByStatus(TradeStatus.CLOSED_LOSS);
+        double winRate = closedTrades == 0 ? 0.0
+                : (winingTrades * 100) / closedTrades;
+
+        return new DashboardStatsDTO(totalTrades, totalPnl, winRate);
     }
 
 }
