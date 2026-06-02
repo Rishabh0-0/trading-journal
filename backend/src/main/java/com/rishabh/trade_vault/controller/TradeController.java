@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.rishabh.trade_vault.dto.DashboardStatsDTO;
 import com.rishabh.trade_vault.dto.TradeCloseRequestDTO;
 import com.rishabh.trade_vault.dto.TradeRequestDTO;
 import com.rishabh.trade_vault.dto.TradeResponseDTO;
@@ -49,5 +50,10 @@ public class TradeController {
     public TradeResponseDTO closeTrade(@PathVariable Integer id,
             @RequestBody @Valid TradeCloseRequestDTO closeRequest) {
         return tradeMapper.toDto(tradeService.closeTrade(id, closeRequest));
+    }
+
+    @GetMapping("/dashboard")
+    public DashboardStatsDTO getDashboardStats() {
+        return tradeService.getDashboardStats();
     }
 }
