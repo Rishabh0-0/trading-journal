@@ -1,7 +1,8 @@
 package com.rishabh.trade_vault.controller;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,7 @@ import com.rishabh.trade_vault.service.TradeService;
 import jakarta.validation.Valid;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/api/trades")
 public class TradeController {
 
@@ -41,9 +43,9 @@ public class TradeController {
     }
 
     @GetMapping
-    public List<TradeResponseDTO> getAllTrades() {
-        List<Trade> allTrades = tradeService.getAllTrades();
-        return allTrades.stream().map(tradeMapper::toDto).toList();
+    public Page<TradeResponseDTO> getAllTrades(Pageable pageable) {
+        Page<Trade> tradePage = tradeService.getAllTrades(pageable);
+        return tradePage.map(tradeMapper::toDto);
     }
 
     @PutMapping("/{id}/close")

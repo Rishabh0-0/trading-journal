@@ -1,8 +1,9 @@
 package com.rishabh.trade_vault.service;
 
 import java.math.BigDecimal;
-import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.rishabh.trade_vault.dto.DashboardStatsDTO;
@@ -20,8 +21,8 @@ public class TradeService {
         this.tradeRepository = tradeRepository;
     }
 
-    public List<Trade> getAllTrades() {
-        return tradeRepository.findAll();
+    public Page<Trade> getAllTrades(Pageable pageable) {
+        return tradeRepository.findAll(pageable);
     }
 
     public Trade logTrade(Trade trade) {
