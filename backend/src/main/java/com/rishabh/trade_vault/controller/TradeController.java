@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,27 +36,28 @@ public class TradeController {
     }
 
     @PostMapping
-    public TradeResponseDTO logTrade(@Valid @RequestBody TradeRequestDTO requestDTO) {
+    public TradeResponseDTO logTrade(@RequestHeader("X-User-Id") Integer userId,
+            @Valid @RequestBody TradeRequestDTO requestDTO) {
         Trade newTrade = tradeMapper.toEntity(requestDTO);
-        Trade savedTrade = tradeService.logTrade(newTrade);
+        Trade savedTrade = tradeService.logTrade(userId, newTrade);
 
         return tradeMapper.toDto(savedTrade);
     }
 
     @GetMapping
-    public Page<TradeResponseDTO> getAllTrades(Pageable pageable) {
-        Page<Trade> tradePage = tradeService.getAllTrades(pageable);
+    public Page<TradeResponseDTO> getAllTrades(@RequestHeader("X-User-Id") Integer userId, Pageable pageable) {
+        Page<Trade> tradePage = tradeService.getAllTrades(userId, pageable);
         return tradePage.map(tradeMapper::toDto);
     }
 
     @PutMapping("/{id}/close")
-    public TradeResponseDTO closeTrade(@PathVariable Integer id,
+    public TradeResponseDTO closeTrade(@RequestHeader("X-User-Id") Integer userId, @PathVariable Integer tradeId,
             @RequestBody @Valid TradeCloseRequestDTO closeRequest) {
-        return tradeMapper.toDto(tradeService.closeTrade(id, closeRequest));
+        return tradeMapper.toDto(tradeService.closeTrade(userId, tradeId, closeRequest));
     }
 
     @GetMapping("/dashboard")
-    public DashboardStatsDTO getDashboardStats() {
-        return tradeService.getDashboardStats();
+    public DashboardStatsDTO getDashboardStats(@RequestHeader("X-User-Id") Integer userId) {
+        return tradeService.getDashboardStats(userId);
     }
 }
