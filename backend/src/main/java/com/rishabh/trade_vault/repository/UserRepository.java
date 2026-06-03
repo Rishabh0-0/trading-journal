@@ -1,0 +1,11 @@
+package com.rishabh.trade_vault.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.rishabh.trade_vault.model.User;
+
+@Repository
+public interface UserRepository extends JpaRepository<User, Integer> {
+
+}

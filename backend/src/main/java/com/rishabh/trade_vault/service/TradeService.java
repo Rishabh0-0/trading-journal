@@ -1,6 +1,7 @@
 package com.rishabh.trade_vault.service;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,33 +11,48 @@ import com.rishabh.trade_vault.dto.DashboardStatsDTO;
 import com.rishabh.trade_vault.dto.TradeCloseRequestDTO;
 import com.rishabh.trade_vault.model.Trade;
 import com.rishabh.trade_vault.model.TradeStatus;
+import com.rishabh.trade_vault.model.User;
 import com.rishabh.trade_vault.repository.TradeRepository;
+import com.rishabh.trade_vault.repository.UserRepository;
 
 @Service
 public class TradeService {
 
     private final TradeRepository tradeRepository;
+    private final UserRepository userRepository;
 
-    public TradeService(TradeRepository tradeRepository) {
+    public TradeService(TradeRepository tradeRepository, UserRepository userRepository) {
         this.tradeRepository = tradeRepository;
+        this.userRepository = userRepository;
     }
 
-    public Page<Trade> getAllTrades(Pageable pageable) {
-        return tradeRepository.findAll(pageable);
+    public Page<Trade> getAllTrades(Integer userId, Pageable pageable) {
+        return tradeRepository.findByUserId(userId, pageable);
     }
 
-    public Trade logTrade(Trade trade) {
+    public Trade logTrade(Integer userId, Trade trade) {
+        Optional<User> user = userRepository.findById(userId);
+
+        if (!user.isPresent()) {
+            throw new RuntimeException("Unauthorized!");
+        }
+
         trade.setStatus(TradeStatus.ACTIVE);
+        trade.setUser(user.get());
 
         return tradeRepository.save(trade);
     }
 
-    public Trade closeTrade(Integer tradeId, TradeCloseRequestDTO closeRequest) {
+    public Trade closeTrade(Integer userId, Integer tradeId, TradeCloseRequestDTO closeRequest) {
         Trade trade = tradeRepository.findById(tradeId)
                 .orElseThrow(() -> new RuntimeException("Trade not found with id: " + tradeId));
 
+        if (!trade.getUser().getId().equals(userId)) {
+            throw new RuntimeException("Unauthorized!");
+        }
+
         if (!trade.getStatus().equals(TradeStatus.ACTIVE)) {
-            throw new RuntimeException("Trade " + tradeId + "is already closed!");
+            throw new RuntimeException("Trade " + tradeId + " is already closed!");
         }
 
         trade.setExitPrice(closeRequest.getExitPrice());
@@ -56,11 +72,11 @@ public class TradeService {
         return tradeRepository.save(trade);
     }
 
-    public DashboardStatsDTO getDashboardStats() {
-        long totalTrades = tradeRepository.count();
-        BigDecimal totalPnl = tradeRepository.sumTotalPnl();
-        double winingTrades = tradeRepository.countByStatus(TradeStatus.CLOSED_PROFIT);
-        double closedTrades = winingTrades + tradeRepository.countByStatus(TradeStatus.CLOSED_LOSS);
+    public DashboardStatsDTO getDashboardStats(Integer userId) {
+        long totalTrades = tradeRepository.countByUserId(userId);
+        BigDecimal totalPnl = tradeRepository.sumTotalPnl(userId);
+        double winingTrades = tradeRepository.countByUserIdAndStatus(userId, TradeStatus.CLOSED_PROFIT);
+        double closedTrades = winingTrades + tradeRepository.countByUserIdAndStatus(userId, TradeStatus.CLOSED_LOSS);
         double winRate = closedTrades == 0 ? 0.0
                 : (winingTrades * 100) / closedTrades;
 

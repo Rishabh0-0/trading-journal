@@ -9,6 +9,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Trade {
@@ -39,13 +41,18 @@ public class Trade {
 
     private BigDecimal pnl;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public Trade() {
 
     }
 
-    public Trade(String symbol, TradeStatus status, TradeStrategy strategy, LocalDate entryDate,
-            LocalDate exitDate,
-            BigDecimal entryPrice, BigDecimal exitPrice, Integer positionSize, BigDecimal brokerage, BigDecimal pnl) {
+    public Trade(Integer id, String symbol, TradeStatus status, TradeStrategy strategy, LocalDate entryDate,
+            LocalDate exitDate, BigDecimal entryPrice, BigDecimal exitPrice, Integer positionSize, BigDecimal brokerage,
+            BigDecimal pnl, User user) {
+        this.id = id;
         this.symbol = symbol;
         this.status = status;
         this.strategy = strategy;
@@ -56,6 +63,7 @@ public class Trade {
         this.positionSize = positionSize;
         this.brokerage = brokerage;
         this.pnl = pnl;
+        this.user = user;
     }
 
     public Integer getId() {
@@ -145,4 +153,13 @@ public class Trade {
     public void setPnl(BigDecimal pnl) {
         this.pnl = pnl;
     }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
 }
