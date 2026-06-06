@@ -2,13 +2,13 @@ package com.rishabh.trade_vault.controller;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,6 +18,7 @@ import com.rishabh.trade_vault.dto.TradeRequestDTO;
 import com.rishabh.trade_vault.dto.TradeResponseDTO;
 import com.rishabh.trade_vault.mapper.TradeMapper;
 import com.rishabh.trade_vault.model.Trade;
+import com.rishabh.trade_vault.model.User;
 import com.rishabh.trade_vault.service.TradeService;
 
 import jakarta.validation.Valid;
@@ -36,28 +37,28 @@ public class TradeController {
     }
 
     @PostMapping
-    public TradeResponseDTO logTrade(@RequestHeader("X-User-Id") Integer userId,
+    public TradeResponseDTO logTrade(@AuthenticationPrincipal User user,
             @Valid @RequestBody TradeRequestDTO requestDTO) {
         Trade newTrade = tradeMapper.toEntity(requestDTO);
-        Trade savedTrade = tradeService.logTrade(userId, newTrade);
+        Trade savedTrade = tradeService.logTrade(user.getId(), newTrade);
 
         return tradeMapper.toDto(savedTrade);
     }
 
     @GetMapping
-    public Page<TradeResponseDTO> getAllTrades(@RequestHeader("X-User-Id") Integer userId, Pageable pageable) {
-        Page<Trade> tradePage = tradeService.getAllTrades(userId, pageable);
+    public Page<TradeResponseDTO> getAllTrades(@AuthenticationPrincipal User user, Pageable pageable) {
+        Page<Trade> tradePage = tradeService.getAllTrades(user.getId(), pageable);
         return tradePage.map(tradeMapper::toDto);
     }
 
     @PutMapping("/{id}/close")
-    public TradeResponseDTO closeTrade(@RequestHeader("X-User-Id") Integer userId, @PathVariable Integer tradeId,
+    public TradeResponseDTO closeTrade(@AuthenticationPrincipal User user, @PathVariable Integer tradeId,
             @RequestBody @Valid TradeCloseRequestDTO closeRequest) {
-        return tradeMapper.toDto(tradeService.closeTrade(userId, tradeId, closeRequest));
+        return tradeMapper.toDto(tradeService.closeTrade(user.getId(), tradeId, closeRequest));
     }
 
     @GetMapping("/dashboard")
-    public DashboardStatsDTO getDashboardStats(@RequestHeader("X-User-Id") Integer userId) {
-        return tradeService.getDashboardStats(userId);
+    public DashboardStatsDTO getDashboardStats(@AuthenticationPrincipal User user) {
+        return tradeService.getDashboardStats(user.getId());
     }
 }
