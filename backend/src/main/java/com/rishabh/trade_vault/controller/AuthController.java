@@ -14,8 +14,11 @@ import com.rishabh.trade_vault.dto.AuthResponseDTO;
 import com.rishabh.trade_vault.model.User;
 import com.rishabh.trade_vault.repository.UserRepository;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 @RestController
 @RequestMapping("/api/auth")
+@CrossOrigin
 public class AuthController {
 
     private final UserRepository userRepository;
