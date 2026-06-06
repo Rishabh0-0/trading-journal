@@ -10,12 +10,10 @@ export default function Header() {
   const { activePage } = useAppStore();
 
   const pageTitles = {
-    dashboard: 'Dashboard',
     trades: 'Trades',
   };
 
   const pageDescriptions = {
-    dashboard: 'Overview of your trading performance',
     trades: 'Browse and filter your trade log',
   };
 
@@ -29,7 +27,7 @@ export default function Header() {
           transition={{ duration: 0.25 }}
           className="text-lg font-semibold text-text-primary"
         >
-          {pageTitles[activePage] || 'Dashboard'}
+          {pageTitles[activePage] || 'Trades'}
         </motion.h2>
         <motion.p
           key={`desc-${activePage}`}

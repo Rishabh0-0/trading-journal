@@ -11,7 +11,7 @@ const useAppStore = create((set) => ({
   setSidebarOpen: (open) => set({ sidebarOpen: open }),
 
   // Active page / route
-  activePage: 'dashboard',
+  activePage: 'trades',
   setActivePage: (page) => set({ activePage: page }),
 
   // Trade Modal

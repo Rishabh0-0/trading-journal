@@ -1,7 +1,6 @@
 import React, { useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  LayoutDashboard,
   ChartCandlestick,
   PlusCircle,
   CircleDollarSign,
@@ -10,11 +9,6 @@ import useAppStore from '../../store/useAppStore';
 import { cn } from '../../lib/utils';
 
 const navItems = [
-  {
-    id: 'dashboard',
-    label: 'Dashboard',
-    icon: LayoutDashboard,
-  },
   {
     id: 'trades',
     label: 'Trades',

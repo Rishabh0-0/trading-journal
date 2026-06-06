@@ -1,7 +1,6 @@
 import React from 'react';
 import useAppStore from './store/useAppStore';
 import AppLayout from './components/layout/AppLayout';
-import DashboardPage from './pages/DashboardPage';
 import TradesPage from './pages/TradesPage';
 import AddTradeModal from './components/modals/AddTradeModal';
 import ExitTradeModal from './components/modals/ExitTradeModal';
@@ -15,12 +14,10 @@ export default function App() {
 
   const renderPage = () => {
     switch (activePage) {
-      case 'dashboard':
-        return <DashboardPage />;
       case 'trades':
         return <TradesPage />;
       default:
-        return <DashboardPage />;
+        return <TradesPage />;
     }
   };
 
