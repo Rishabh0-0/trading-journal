@@ -42,7 +42,7 @@ export default function TradesTable({ data }) {
   }), [data, filter]);
 
   return (
-    <div className="card-base flex flex-col h-full overflow-hidden">
+    <div className="flex flex-col h-full overflow-hidden">
       {/* Table Header / Toolbar */}
       <div className="flex items-center justify-between p-5 border-b border-border-default">
         <h3 className="text-sm font-bold text-text-primary">All Trades</h3>
