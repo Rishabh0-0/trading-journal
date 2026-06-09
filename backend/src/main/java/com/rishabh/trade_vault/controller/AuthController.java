@@ -36,9 +36,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public void register(@RequestBody AuthRequestDTO request) {
-        User newUser = new User();
-        newUser.setUsername(request.getUsername());
-        newUser.setPassword(passwordEncoder.encode(request.getPassword()));
+        User newUser = new User(request.getUsername(), passwordEncoder.encode(request.getPassword()));
 
         userRepository.save(newUser);
     }

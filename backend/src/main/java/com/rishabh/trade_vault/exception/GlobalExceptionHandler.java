@@ -1,5 +1,6 @@
 package com.rishabh.trade_vault.exception;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -16,6 +17,13 @@ public class GlobalExceptionHandler {
         String errorMessage = ex.getBindingResult().getFieldError().getDefaultMessage();
 
         ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO(errorMessage, 400);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDTO);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponseDTO> handleIntegrityExceptions(DataIntegrityViolationException ex) {
+        ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO("An account with this email already exists.", 400);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDTO);
     }

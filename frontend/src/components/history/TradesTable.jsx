@@ -22,7 +22,7 @@ const FILTERS = ['ALL', 'ACTIVE', 'PROFIT', 'LOSS'];
  * TradesTable — Full data table for the Trades page.
  * Features: filtering tabs with count badges, averaging action, accessible markup.
  */
-export default function TradesTable({ data }) {
+export default function TradesTable({ data = [] }) {
   const [filter, setFilter] = useState('ACTIVE');
   const { openTradeModal, openExitTradeModal } = useAppStore();
 

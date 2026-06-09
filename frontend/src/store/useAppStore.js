@@ -25,6 +25,17 @@ const useAppStore = create((set) => ({
   exitTradeModalTrade: null,
   openExitTradeModal: (trade) => set({ exitTradeModalOpen: true, exitTradeModalTrade: trade }),
   closeExitTradeModal: () => set({ exitTradeModalOpen: false, exitTradeModalTrade: null }),
+
+  // Auth State
+  isAuthenticated: !!localStorage.getItem('token'),
+  login: (token) => {
+    localStorage.setItem('token', token);
+    set({ isAuthenticated: true });
+  },
+  logout: () => {
+    localStorage.removeItem('token');
+    set({ isAuthenticated: false, activePage: 'trades' });
+  },
 }));
 
 export default useAppStore;
