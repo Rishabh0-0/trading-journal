@@ -23,7 +23,7 @@ const FILTERS = ['ALL', 'ACTIVE', 'PROFIT', 'LOSS'];
  * Features: filtering tabs with count badges, averaging action, accessible markup.
  */
 export default function TradesTable({ data }) {
-  const [filter, setFilter] = useState('ALL');
+  const [filter, setFilter] = useState('ACTIVE');
   const { openTradeModal, openExitTradeModal } = useAppStore();
 
   // Precompute counts for filter badges
@@ -44,9 +44,9 @@ export default function TradesTable({ data }) {
   return (
     <div className="flex flex-col h-full overflow-hidden">
       {/* Table Header / Toolbar */}
-      <div className="flex items-center justify-between p-5 border-b border-border-default">
+      <div className="flex items-center justify-between p-2 border-b border-border-default">
         <h3 className="text-sm font-bold text-text-primary">All Trades</h3>
-        
+
         {/* Filter Tabs */}
         <div className="flex bg-bg-tertiary p-1 rounded-lg" role="tablist" aria-label="Trade status filter">
           {FILTERS.map((f) => (
@@ -57,8 +57,8 @@ export default function TradesTable({ data }) {
               aria-selected={filter === f}
               className={cn(
                 "px-3 py-1.5 text-[11px] font-bold rounded-md transition-all cursor-pointer inline-flex items-center gap-1.5",
-                filter === f 
-                  ? "bg-bg-secondary text-text-primary shadow-sm" 
+                filter === f
+                  ? "bg-bg-secondary text-text-primary shadow-sm"
                   : "text-text-tertiary hover:text-text-secondary"
               )}
             >
@@ -77,7 +77,7 @@ export default function TradesTable({ data }) {
       {/* Table Container */}
       <div className="flex-1 overflow-auto" role="tabpanel">
         <table className="w-full text-left border-collapse min-w-[1000px]">
-          <thead className="sticky top-0 bg-bg-secondary border-b border-border-default shadow-sm z-10">
+          <thead className="sticky top-0 bg-bg-secondary border-b border-border-default z-10">
             <tr>
               <th className="p-4 text-[10px] font-bold uppercase tracking-wider text-text-tertiary whitespace-nowrap">Symbol</th>
               <th className="p-4 text-[10px] font-bold uppercase tracking-wider text-text-tertiary whitespace-nowrap">Status</th>
@@ -95,7 +95,7 @@ export default function TradesTable({ data }) {
             {filteredData.map((trade, index) => {
               const daysHeld = calculateDaysHeld(trade.entryDate, trade.exitDate);
               return (
-                <motion.tr 
+                <motion.tr
                   key={trade.id}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -106,7 +106,7 @@ export default function TradesTable({ data }) {
                   <td className="p-4">
                     <span className="font-bold text-sm text-text-primary">{trade.symbol}</span>
                   </td>
-                  
+
                   {/* Status */}
                   <td className="p-4">
                     <span className={cn(
@@ -165,7 +165,7 @@ export default function TradesTable({ data }) {
                   <td className="p-4 text-center">
                     {trade.status === 'ACTIVE' ? (
                       <div className="flex items-center justify-center gap-2">
-                        <button 
+                        <button
                           className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-accent-blue-muted text-accent-blue hover:bg-accent-blue hover:text-white transition-colors cursor-pointer"
                           aria-label={`Add position to ${trade.symbol}`}
                           title="Add Position (Average)"
@@ -178,7 +178,7 @@ export default function TradesTable({ data }) {
                         >
                           <Plus size={16} strokeWidth={2.5} />
                         </button>
-                        <button 
+                        <button
                           className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-accent-red-muted text-accent-red hover:bg-accent-red hover:text-white transition-colors cursor-pointer"
                           aria-label={`Close ${trade.symbol} position`}
                           title="Close Position"
@@ -196,7 +196,7 @@ export default function TradesTable({ data }) {
             })}
           </tbody>
         </table>
-        
+
         {/* Empty State */}
         {filteredData.length === 0 && (
           <div className="flex flex-col items-center justify-center p-16 text-center gap-3">

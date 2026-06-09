@@ -12,7 +12,7 @@ export default function AppLayout({ children }) {
       <Sidebar />
 
       <motion.div
-        className="flex flex-1 flex-col overflow-hidden rounded-3xl border border-border-default bg-bg-secondary/50 backdrop-blur-sm shadow-sm"
+        className="flex flex-1 flex-col overflow-hidden rounded-3xl border border-border-default bg-bg-secondary shadow-sm"
         transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
       >
         <main className="flex-1 overflow-y-auto p-6">

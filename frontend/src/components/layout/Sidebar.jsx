@@ -43,7 +43,7 @@ function NavItem({ item, isActive, collapsed, onClick, index }) {
         <motion.div
           layoutId="activeNav"
           className="absolute left-0 top-1/2 h-6 w-[3px] -translate-y-1/2 rounded-r-full bg-accent-blue"
-          style={{ boxShadow: '0 0 12px rgba(0, 212, 255, 0.5)' }}
+          style={{ boxShadow: '0 0 12px rgba(79, 70, 229, 0.4)' }}
           transition={{ type: 'spring', stiffness: 350, damping: 30 }}
         />
       )}
@@ -198,8 +198,8 @@ export default function Sidebar() {
           whileHover={{ scale: 1.03, transition: { type: 'spring', stiffness: 400, damping: 20 } }}
           whileTap={{ scale: 0.96 }}
           style={{
-            border: '1px solid rgba(0, 212, 255, 0.15)',
-            boxShadow: '0 0 20px rgba(0, 212, 255, 0.06)',
+            border: '1px solid rgba(79, 70, 229, 0.15)',
+            boxShadow: '0 0 20px rgba(79, 70, 229, 0.06)',
           }}
         >
           <motion.div
