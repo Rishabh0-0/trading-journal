@@ -14,6 +14,10 @@ const useAppStore = create((set) => ({
   activePage: 'trades',
   setActivePage: (page) => set({ activePage: page }),
 
+  // Data refresh trigger
+  refreshTrigger: 0,
+  triggerRefresh: () => set((state) => ({ refreshTrigger: state.refreshTrigger + 1 })),
+
   // Trade Modal
   tradeModalOpen: false,
   tradeModalPrefill: null, // { symbol, strategy, entryPrice, size } for averaging

@@ -6,7 +6,7 @@ import useAppStore from '../store/useAppStore';
  * Trades page — Full trade log and details.
  */
 export default function TradesPage() {
-  const { logout } = useAppStore();
+  const { logout, refreshTrigger } = useAppStore();
   const [trades, setTrades] = useState([]);
 
   useEffect(() => {
@@ -34,7 +34,7 @@ export default function TradesPage() {
         }
       })
       .catch(error => console.error("Error fetching trades:", error));
-  }, [logout])
+  }, [logout, refreshTrigger])
 
   return <TradesTable data={trades} />;
 }

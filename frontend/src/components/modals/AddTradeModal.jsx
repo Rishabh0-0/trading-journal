@@ -5,14 +5,12 @@ import { X, TrendingUp, Calendar, Hash, IndianRupee, BarChart3, Layers } from 'l
 import useAppStore from '../../store/useAppStore';
 import { cn } from '../../lib/utils';
 
-const STRATEGIES = [
-  'Momentum Breakout',
-  'Mean Reversion',
-  'Trend Following',
-  'Options Selling',
-  'Swing Trade',
-  'Scalping',
-];
+const STRATEGY_MAP = {
+  'Trendline Breakout': 'TRENDINE_BREAKOUT',
+  'Mean Reversion': 'MEAN_REVERSION',
+  'Trend Following': 'TREND_FOLLOWING',
+  'Option Buying': 'OPTION_BUYING',
+};
 
 const overlayVariants = {
   hidden: { opacity: 0 },
@@ -47,7 +45,7 @@ function FormField({ icon: Icon, label, children, className }) {
  * AddTradeModal — Premium slide-up modal for creating a new trade or adding to a position.
  */
 export default function AddTradeModal() {
-  const { tradeModalOpen, tradeModalPrefill, closeTradeModal } = useAppStore();
+  const { tradeModalOpen, tradeModalPrefill, closeTradeModal, triggerRefresh } = useAppStore();
 
   // Form state
   const [symbol, setSymbol] = useState('');
@@ -85,21 +83,42 @@ export default function AddTradeModal() {
     }
   }, [tradeModalOpen, tradeModalPrefill]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // In a real app, this would dispatch to an API
+    const token = localStorage.getItem('token');
+    
+    // Map the selected display strategy to the backend enum
+    const backendStrategy = STRATEGY_MAP[strategy] || 'TREND_FOLLOWING';
+
     const tradeData = {
       symbol: symbol.toUpperCase(),
-      strategy,
+      strategy: backendStrategy,
       entryDate,
-      size: parseInt(size, 10),
+      positionSize: parseInt(size, 10),
       entryPrice: parseFloat(entryPrice),
-      brokerage: parseFloat(brokerage) || 0,
-      notes,
-      isAveraging,
+      // Brokerage, notes, and isAveraging are omitted as they are not currently in TradeRequestDTO
     };
-    console.log('Trade submitted:', tradeData);
-    closeTradeModal();
+    
+    try {
+      const response = await fetch('http://localhost:8080/api/trades', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(tradeData)
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to add trade');
+      }
+      
+      triggerRefresh();
+      closeTradeModal();
+    } catch (error) {
+      console.error('Error adding trade:', error);
+      alert('Error adding trade: ' + error.message);
+    }
   };
 
   const inputClasses = "w-full rounded-xl border border-border-default bg-bg-input px-3.5 py-2.5 text-sm font-medium text-text-primary placeholder:text-text-tertiary/60 focus:outline-none focus:border-accent-blue focus:ring-2 focus:ring-accent-blue/10 transition-all";
@@ -195,7 +214,7 @@ export default function AddTradeModal() {
                         disabled={isAveraging}
                       >
                         <option value="" disabled>Select strategy</option>
-                        {STRATEGIES.map((s) => (
+                        {Object.keys(STRATEGY_MAP).map((s) => (
                           <option key={s} value={s}>{s}</option>
                         ))}
                       </select>
