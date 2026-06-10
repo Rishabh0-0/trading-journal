@@ -51,7 +51,7 @@ public class TradeController {
         return tradePage.map(tradeMapper::toDto);
     }
 
-    @PutMapping("/{id}/close")
+    @PutMapping("/{tradeId}/close")
     public TradeResponseDTO closeTrade(@AuthenticationPrincipal User user, @PathVariable Integer tradeId,
             @RequestBody @Valid TradeCloseRequestDTO closeRequest) {
         return tradeMapper.toDto(tradeService.closeTrade(user.getId(), tradeId, closeRequest));
