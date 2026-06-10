@@ -133,7 +133,7 @@ export default function TradesTable({ data = [] }) {
 
                   {/* Size */}
                   <td className="p-4 text-right">
-                    <span className="text-sm font-semibold text-text-primary tabular-nums">{trade.size}</span>
+                    <span className="text-sm font-semibold text-text-primary tabular-nums">{trade.positionSize}</span>
                   </td>
 
                   {/* Entry Price */}
@@ -173,7 +173,7 @@ export default function TradesTable({ data = [] }) {
                             symbol: trade.symbol,
                             strategy: trade.strategy,
                             entryPrice: trade.entryPrice,
-                            size: trade.size,
+                            positionSize: trade.positionSize,
                           })}
                         >
                           <Plus size={16} strokeWidth={2.5} />
