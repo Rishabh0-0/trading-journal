@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Calendar, IndianRupee, LogOut, Hash } from 'lucide-react';
 import useAppStore from '../../store/useAppStore';
 import { cn } from '../../lib/utils';
+import { calculateDhanEquityDeliveryCharges } from '../../lib/calculator';
 
 const overlayVariants = {
   hidden: { opacity: 0 },
@@ -37,16 +38,28 @@ export default function ExitTradeModal() {
   const [exitDate, setExitDate] = useState('');
   const [exitPrice, setExitPrice] = useState('');
   const [exitQuantity, setExitQuantity] = useState('');
-  const [brokerage, setBrokerage] = useState('');
+  const [charges, setCharges] = useState('');
 
   useEffect(() => {
     if (exitTradeModalOpen) {
       setExitDate(new Date().toISOString().split('T')[0]);
       setExitPrice('');
-      setBrokerage('');
+      setCharges('');
       setExitQuantity(exitTradeModalTrade?.positionSize?.toString() || '');
     }
   }, [exitTradeModalOpen, exitTradeModalTrade]);
+
+  // Auto-calculate charges when price or quantity changes
+  useEffect(() => {
+    if (exitPrice && exitQuantity) {
+      const p = parseFloat(exitPrice);
+      const q = parseInt(exitQuantity, 10);
+      if (!isNaN(p) && !isNaN(q)) {
+        const calc = calculateDhanEquityDeliveryCharges(p, q, 'SELL');
+        setCharges(calc.toString());
+      }
+    }
+  }, [exitPrice, exitQuantity]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -55,7 +68,7 @@ export default function ExitTradeModal() {
     const tradeData = {
       exitDate,
       exitPrice: parseFloat(exitPrice),
-      brokerage: parseFloat(brokerage) || 0,
+      charges: parseFloat(charges) || 0,
     };
     
     try {
@@ -191,11 +204,11 @@ export default function ExitTradeModal() {
                       />
                     </FormField>
 
-                    <FormField icon={IndianRupee} label="Exit Brokerage">
+                    <FormField icon={IndianRupee} label="Exit Charges">
                       <input
                         type="number"
-                        value={brokerage}
-                        onChange={(e) => setBrokerage(e.target.value)}
+                        value={charges}
+                        onChange={(e) => setCharges(e.target.value)}
                         placeholder="e.g. 150.00"
                         className={inputClasses}
                         step="0.01"

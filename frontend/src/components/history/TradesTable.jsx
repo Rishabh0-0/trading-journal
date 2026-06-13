@@ -86,7 +86,7 @@ export default function TradesTable({ data = [] }) {
               <th className="p-4 text-[10px] font-bold uppercase tracking-wider text-text-tertiary text-right whitespace-nowrap">Size</th>
               <th className="p-4 text-[10px] font-bold uppercase tracking-wider text-text-tertiary text-right whitespace-nowrap">Entry Price</th>
               <th className="p-4 text-[10px] font-bold uppercase tracking-wider text-text-tertiary text-right whitespace-nowrap">Exit Price</th>
-              <th className="p-4 text-[10px] font-bold uppercase tracking-wider text-text-tertiary text-right whitespace-nowrap">Brokerage</th>
+              <th className="p-4 text-[10px] font-bold uppercase tracking-wider text-text-tertiary text-right whitespace-nowrap">Charges</th>
               <th className="p-4 text-[10px] font-bold uppercase tracking-wider text-text-tertiary text-right whitespace-nowrap">Net P&L</th>
               <th className="p-4 text-[10px] font-bold uppercase tracking-wider text-text-tertiary text-center whitespace-nowrap">Action</th>
             </tr>
@@ -146,9 +146,9 @@ export default function TradesTable({ data = [] }) {
                     <span className="text-sm font-medium text-text-secondary tabular-nums">{formatINR(trade.exitPrice, 2)}</span>
                   </td>
 
-                  {/* Brokerage */}
+                  {/* Charges */}
                   <td className="p-4 text-right">
-                    <span className="text-xs font-medium text-accent-amber tabular-nums">-{formatINR(trade.brokerage, 2)}</span>
+                    <span className="text-xs font-medium text-accent-amber tabular-nums">-{formatINR(trade.charges || 0, 2)}</span>
                   </td>
 
                   {/* Net P&L */}

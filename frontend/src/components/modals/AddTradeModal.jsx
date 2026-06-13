@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, TrendingUp, Calendar, Hash, IndianRupee, BarChart3, Layers } from 'lucide-react';
 import useAppStore from '../../store/useAppStore';
 import { cn } from '../../lib/utils';
+import { calculateDhanEquityDeliveryCharges } from '../../lib/calculator';
 
 const STRATEGY_MAP = {
   'Trendline Breakout': 'TRENDINE_BREAKOUT',
@@ -53,7 +54,7 @@ export default function AddTradeModal() {
   const [entryDate, setEntryDate] = useState('');
   const [size, setSize] = useState('');
   const [entryPrice, setEntryPrice] = useState('');
-  const [brokerage, setBrokerage] = useState('');
+  const [charges, setCharges] = useState('');
   const [notes, setNotes] = useState('');
 
   // Determine mode
@@ -67,7 +68,7 @@ export default function AddTradeModal() {
         setStrategy(tradeModalPrefill.strategy || '');
         setEntryPrice('');
         setSize('');
-        setBrokerage('');
+        setCharges('');
         setNotes('');
         // Default to today
         setEntryDate(new Date().toISOString().split('T')[0]);
@@ -76,12 +77,24 @@ export default function AddTradeModal() {
         setStrategy('');
         setEntryPrice('');
         setSize('');
-        setBrokerage('');
+        setCharges('');
         setNotes('');
         setEntryDate(new Date().toISOString().split('T')[0]);
       }
     }
   }, [tradeModalOpen, tradeModalPrefill]);
+
+  // Auto-calculate charges when price or size changes
+  useEffect(() => {
+    if (entryPrice && size) {
+      const p = parseFloat(entryPrice);
+      const q = parseInt(size, 10);
+      if (!isNaN(p) && !isNaN(q)) {
+        const calc = calculateDhanEquityDeliveryCharges(p, q, 'BUY');
+        setCharges(calc.toString());
+      }
+    }
+  }, [entryPrice, size]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -96,7 +109,8 @@ export default function AddTradeModal() {
       entryDate,
       positionSize: parseInt(size, 10),
       entryPrice: parseFloat(entryPrice),
-      // Brokerage, notes, and isAveraging are omitted as they are not currently in TradeRequestDTO
+      charges: parseFloat(charges) || 0,
+      // notes and isAveraging are omitted as they are not currently in TradeRequestDTO
     };
     
     try {
@@ -262,11 +276,11 @@ export default function AddTradeModal() {
                       />
                     </FormField>
 
-                    <FormField icon={IndianRupee} label="Brokerage">
+                    <FormField icon={IndianRupee} label="Charges">
                       <input
                         type="number"
-                        value={brokerage}
-                        onChange={(e) => setBrokerage(e.target.value)}
+                        value={charges}
+                        onChange={(e) => setCharges(e.target.value)}
                         placeholder="e.g. 120.00"
                         className={inputClasses}
                         step="0.01"
