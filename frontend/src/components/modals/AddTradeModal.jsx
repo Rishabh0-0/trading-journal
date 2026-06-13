@@ -4,15 +4,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, TrendingUp, Calendar, Hash, IndianRupee, BarChart3, Layers } from 'lucide-react';
 import useAppStore from '../../store/useAppStore';
 import { cn } from '../../lib/utils';
+import { calculateDhanEquityDeliveryCharges } from '../../lib/calculator';
 
-const STRATEGIES = [
-  'Momentum Breakout',
-  'Mean Reversion',
-  'Trend Following',
-  'Options Selling',
-  'Swing Trade',
-  'Scalping',
-];
+const STRATEGY_MAP = {
+  'Trendline Breakout': 'TRENDINE_BREAKOUT',
+  'Mean Reversion': 'MEAN_REVERSION',
+  'Trend Following': 'TREND_FOLLOWING',
+  'Option Buying': 'OPTION_BUYING',
+};
 
 const overlayVariants = {
   hidden: { opacity: 0 },
@@ -47,7 +46,7 @@ function FormField({ icon: Icon, label, children, className }) {
  * AddTradeModal — Premium slide-up modal for creating a new trade or adding to a position.
  */
 export default function AddTradeModal() {
-  const { tradeModalOpen, tradeModalPrefill, closeTradeModal } = useAppStore();
+  const { tradeModalOpen, tradeModalPrefill, closeTradeModal, triggerRefresh } = useAppStore();
 
   // Form state
   const [symbol, setSymbol] = useState('');
@@ -55,7 +54,7 @@ export default function AddTradeModal() {
   const [entryDate, setEntryDate] = useState('');
   const [size, setSize] = useState('');
   const [entryPrice, setEntryPrice] = useState('');
-  const [brokerage, setBrokerage] = useState('');
+  const [charges, setCharges] = useState('');
   const [notes, setNotes] = useState('');
 
   // Determine mode
@@ -69,7 +68,7 @@ export default function AddTradeModal() {
         setStrategy(tradeModalPrefill.strategy || '');
         setEntryPrice('');
         setSize('');
-        setBrokerage('');
+        setCharges('');
         setNotes('');
         // Default to today
         setEntryDate(new Date().toISOString().split('T')[0]);
@@ -78,28 +77,70 @@ export default function AddTradeModal() {
         setStrategy('');
         setEntryPrice('');
         setSize('');
-        setBrokerage('');
+        setCharges('');
         setNotes('');
         setEntryDate(new Date().toISOString().split('T')[0]);
       }
     }
   }, [tradeModalOpen, tradeModalPrefill]);
 
-  const handleSubmit = (e) => {
+  // Auto-calculate charges when price or size changes
+  useEffect(() => {
+    if (entryPrice && size) {
+      const p = parseFloat(entryPrice);
+      const q = parseInt(size, 10);
+      if (!isNaN(p) && !isNaN(q)) {
+        const calc = calculateDhanEquityDeliveryCharges(p, q, 'BUY');
+        setCharges(calc.toString());
+      }
+    }
+  }, [entryPrice, size]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // In a real app, this would dispatch to an API
+    const token = localStorage.getItem('token');
+    
+    // Map the selected display strategy to the backend enum
+    const backendStrategy = STRATEGY_MAP[strategy] || 'TREND_FOLLOWING';
+
     const tradeData = {
       symbol: symbol.toUpperCase(),
-      strategy,
+      strategy: backendStrategy,
       entryDate,
-      size: parseInt(size, 10),
+      positionSize: parseInt(size, 10),
       entryPrice: parseFloat(entryPrice),
-      brokerage: parseFloat(brokerage) || 0,
-      notes,
-      isAveraging,
+      charges: parseFloat(charges) || 0,
+      // notes and isAveraging are omitted as they are not currently in TradeRequestDTO
     };
-    console.log('Trade submitted:', tradeData);
-    closeTradeModal();
+    
+    try {
+      let endpoint = 'http://localhost:8080/api/trades';
+      let method = 'POST';
+
+      if (isAveraging) {
+        endpoint = `http://localhost:8080/api/trades/${tradeModalPrefill.id}/add`;
+        method = 'PUT';
+      }
+
+      const response = await fetch(endpoint, {
+        method: method,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(tradeData)
+      });
+      
+      if (!response.ok) {
+        throw new Error(isAveraging ? 'Failed to add position' : 'Failed to add trade');
+      }
+      
+      triggerRefresh();
+      closeTradeModal();
+    } catch (error) {
+      console.error('Error adding trade:', error);
+      alert('Error adding trade: ' + error.message);
+    }
   };
 
   const inputClasses = "w-full rounded-xl border border-border-default bg-bg-input px-3.5 py-2.5 text-sm font-medium text-text-primary placeholder:text-text-tertiary/60 focus:outline-none focus:border-accent-blue focus:ring-2 focus:ring-accent-blue/10 transition-all";
@@ -195,7 +236,7 @@ export default function AddTradeModal() {
                         disabled={isAveraging}
                       >
                         <option value="" disabled>Select strategy</option>
-                        {STRATEGIES.map((s) => (
+                        {Object.keys(STRATEGY_MAP).map((s) => (
                           <option key={s} value={s}>{s}</option>
                         ))}
                       </select>
@@ -243,11 +284,11 @@ export default function AddTradeModal() {
                       />
                     </FormField>
 
-                    <FormField icon={IndianRupee} label="Brokerage">
+                    <FormField icon={IndianRupee} label="Charges">
                       <input
                         type="number"
-                        value={brokerage}
-                        onChange={(e) => setBrokerage(e.target.value)}
+                        value={charges}
+                        onChange={(e) => setCharges(e.target.value)}
                         placeholder="e.g. 120.00"
                         className={inputClasses}
                         step="0.01"

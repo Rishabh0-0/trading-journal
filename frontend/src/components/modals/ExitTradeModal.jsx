@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Calendar, IndianRupee, LogOut, Hash } from 'lucide-react';
 import useAppStore from '../../store/useAppStore';
 import { cn } from '../../lib/utils';
+import { calculateDhanEquityDeliveryCharges } from '../../lib/calculator';
 
 const overlayVariants = {
   hidden: { opacity: 0 },
@@ -32,43 +33,70 @@ function FormField({ icon: Icon, label, children, className }) {
 }
 
 export default function ExitTradeModal() {
-  const { exitTradeModalOpen, exitTradeModalTrade, closeExitTradeModal } = useAppStore();
+  const { exitTradeModalOpen, exitTradeModalTrade, closeExitTradeModal, triggerRefresh } = useAppStore();
 
   const [exitDate, setExitDate] = useState('');
   const [exitPrice, setExitPrice] = useState('');
   const [exitQuantity, setExitQuantity] = useState('');
-  const [brokerage, setBrokerage] = useState('');
+  const [charges, setCharges] = useState('');
 
   useEffect(() => {
     if (exitTradeModalOpen) {
       setExitDate(new Date().toISOString().split('T')[0]);
       setExitPrice('');
-      setBrokerage('');
-      setExitQuantity(exitTradeModalTrade?.size?.toString() || '');
+      setCharges('');
+      setExitQuantity(exitTradeModalTrade?.positionSize?.toString() || '');
     }
   }, [exitTradeModalOpen, exitTradeModalTrade]);
 
-  const handleSubmit = (e) => {
+  // Auto-calculate charges when price or quantity changes
+  useEffect(() => {
+    if (exitPrice && exitQuantity) {
+      const p = parseFloat(exitPrice);
+      const q = parseInt(exitQuantity, 10);
+      if (!isNaN(p) && !isNaN(q)) {
+        const calc = calculateDhanEquityDeliveryCharges(p, q, 'SELL');
+        setCharges(calc.toString());
+      }
+    }
+  }, [exitPrice, exitQuantity]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const qty = parseInt(exitQuantity, 10);
-    const isPartial = qty < exitTradeModalTrade?.size;
+    const token = localStorage.getItem('token');
     
     const tradeData = {
-      ...exitTradeModalTrade,
       exitDate,
       exitPrice: parseFloat(exitPrice),
-      exitQuantity: qty,
-      brokerage: parseFloat(brokerage) || 0,
-      status: isPartial ? 'PARTIAL-CLOSE' : 'CLOSED', 
+      charges: parseFloat(charges) || 0,
     };
-    console.log(`Trade ${isPartial ? 'partially' : 'fully'} closed:`, tradeData);
-    closeExitTradeModal();
+    
+    try {
+      const response = await fetch(`http://localhost:8080/api/trades/${exitTradeModalTrade.id}/close`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(tradeData)
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to close trade');
+      }
+      
+      triggerRefresh();
+      closeExitTradeModal();
+    } catch (error) {
+      console.error('Error closing trade:', error);
+      alert('Error closing trade: ' + error.message);
+    }
   };
 
   const inputClasses = "w-full rounded-xl border border-border-default bg-bg-input px-3.5 py-2.5 text-sm font-medium text-text-primary placeholder:text-text-tertiary/60 focus:outline-none focus:border-accent-blue focus:ring-2 focus:ring-accent-blue/10 transition-all";
 
   const currentQty = parseInt(exitQuantity, 10) || 0;
-  const isPartial = exitTradeModalTrade && currentQty > 0 && currentQty < exitTradeModalTrade.size;
+  const isPartial = exitTradeModalTrade && currentQty > 0 && currentQty < exitTradeModalTrade.positionSize;
 
   return (
     <Dialog.Root open={exitTradeModalOpen} onOpenChange={(open) => !open && closeExitTradeModal()}>
@@ -128,8 +156,8 @@ export default function ExitTradeModal() {
                     <LogOut size={14} className={isPartial ? "text-accent-amber" : "text-accent-red"} />
                     <span className={cn("text-[11px] font-semibold", isPartial ? "text-accent-amber" : "text-accent-red")}>
                       {isPartial 
-                        ? `Partial Exit: Closing ${currentQty} of ${exitTradeModalTrade?.size} units`
-                        : `Full Exit: Closing all ${exitTradeModalTrade?.size} units`
+                        ? `Partial Exit: Closing ${currentQty} of ${exitTradeModalTrade?.positionSize} units`
+                        : `Full Exit: Closing all ${exitTradeModalTrade?.positionSize} units`
                       }
                     </span>
                   </motion.div>
@@ -142,12 +170,11 @@ export default function ExitTradeModal() {
                         type="number"
                         value={exitQuantity}
                         onChange={(e) => setExitQuantity(e.target.value)}
-                        placeholder={`Max ${exitTradeModalTrade?.size}`}
+                        placeholder={`Max ${exitTradeModalTrade?.positionSize}`}
                         className={inputClasses}
                         min="1"
-                        max={exitTradeModalTrade?.size}
+                        max={exitTradeModalTrade?.positionSize}
                         required
-                        autoFocus
                       />
                     </FormField>
 
@@ -173,14 +200,15 @@ export default function ExitTradeModal() {
                         step="0.01"
                         min="0"
                         required
+                        autoFocus
                       />
                     </FormField>
 
-                    <FormField icon={IndianRupee} label="Exit Brokerage">
+                    <FormField icon={IndianRupee} label="Exit Charges">
                       <input
                         type="number"
-                        value={brokerage}
-                        onChange={(e) => setBrokerage(e.target.value)}
+                        value={charges}
+                        onChange={(e) => setCharges(e.target.value)}
                         placeholder="e.g. 150.00"
                         className={inputClasses}
                         step="0.01"

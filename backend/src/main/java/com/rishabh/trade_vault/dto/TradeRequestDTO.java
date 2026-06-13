@@ -22,17 +22,20 @@ public class TradeRequestDTO {
 
     private Integer positionSize;
 
+    private BigDecimal charges;
+
     public TradeRequestDTO() {
 
     }
 
     public TradeRequestDTO(String symbol, TradeStrategy strategy, LocalDate entryDate, BigDecimal entryPrice,
-            Integer positionSize) {
+            Integer positionSize, BigDecimal charges) {
         this.symbol = symbol;
         this.strategy = strategy;
         this.entryDate = entryDate;
         this.entryPrice = entryPrice;
         this.positionSize = positionSize;
+        this.charges = charges;
     }
 
     public String getSymbol() {
@@ -73,6 +76,14 @@ public class TradeRequestDTO {
 
     public void setPositionSize(Integer positionSize) {
         this.positionSize = positionSize;
+    }
+
+    public BigDecimal getCharges() {
+        return charges;
+    }
+
+    public void setCharges(BigDecimal charges) {
+        this.charges = charges;
     }
 
 }

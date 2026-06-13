@@ -25,7 +25,7 @@ public class TradeResponseDTO {
 
     private Integer positionSize;
 
-    private BigDecimal brokerage;
+    private BigDecimal charges;
 
     private BigDecimal pnl;
 
@@ -33,7 +33,7 @@ public class TradeResponseDTO {
     }
 
     public TradeResponseDTO(Integer id, String symbol, TradeStatus status, TradeStrategy strategy, LocalDate entryDate,
-            LocalDate exitDate, BigDecimal entryPrice, BigDecimal exitPrice, Integer positionSize, BigDecimal brokerage,
+            LocalDate exitDate, BigDecimal entryPrice, BigDecimal exitPrice, Integer positionSize, BigDecimal charges,
             BigDecimal pnl) {
         this.id = id;
         this.symbol = symbol;
@@ -44,7 +44,7 @@ public class TradeResponseDTO {
         this.entryPrice = entryPrice;
         this.exitPrice = exitPrice;
         this.positionSize = positionSize;
-        this.brokerage = brokerage;
+        this.charges = charges;
         this.pnl = pnl;
     }
 
@@ -120,12 +120,12 @@ public class TradeResponseDTO {
         this.positionSize = positionSize;
     }
 
-    public BigDecimal getBrokerage() {
-        return brokerage;
+    public BigDecimal getCharges() {
+        return charges;
     }
 
-    public void setBrokerage(BigDecimal brokerage) {
-        this.brokerage = brokerage;
+    public void setCharges(BigDecimal charges) {
+        this.charges = charges;
     }
 
     public BigDecimal getPnl() {

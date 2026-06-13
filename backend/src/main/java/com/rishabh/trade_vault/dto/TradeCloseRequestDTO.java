@@ -13,16 +13,15 @@ public class TradeCloseRequestDTO {
     @NotNull(message = "Exit date is required!")
     private LocalDate exitDate;
 
-    @NotNull(message = "Brokerage cannot be empty!")
-    private BigDecimal brokerage;
+    private BigDecimal charges;
 
     public TradeCloseRequestDTO() {
     }
 
-    public TradeCloseRequestDTO(BigDecimal exitPrice, LocalDate exitDate, BigDecimal brokerage) {
+    public TradeCloseRequestDTO(BigDecimal exitPrice, LocalDate exitDate, BigDecimal charges) {
         this.exitPrice = exitPrice;
         this.exitDate = exitDate;
-        this.brokerage = brokerage;
+        this.charges = charges;
     }
 
     public BigDecimal getExitPrice() {
@@ -41,11 +40,11 @@ public class TradeCloseRequestDTO {
         this.exitDate = exitDate;
     }
 
-    public BigDecimal getBrokerage() {
-        return brokerage;
+    public BigDecimal getCharges() {
+        return charges;
     }
 
-    public void setBrokerage(BigDecimal brokerage) {
-        this.brokerage = brokerage;
+    public void setCharges(BigDecimal charges) {
+        this.charges = charges;
     }
 }
