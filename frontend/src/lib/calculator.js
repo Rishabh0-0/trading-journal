@@ -31,7 +31,10 @@ export function calculateDhanEquityDeliveryCharges(price, quantity, side) {
   // Stamp Duty: 0.015% only on Buy side
   const stampDuty = side === 'BUY' ? turnover * 0.00015 : 0;
   
-  const totalCharges = brokerage + stt + txnCharge + sebiCharge + gst + stampDuty;
+  // DP Charges: ₹15.93 (₹13.50 + 18% GST) flat fee only on Sell side
+  const dpCharges = side === 'SELL' ? 15.93 : 0;
+  
+  const totalCharges = brokerage + stt + txnCharge + sebiCharge + gst + stampDuty + dpCharges;
   
   return Number(totalCharges.toFixed(2));
 }

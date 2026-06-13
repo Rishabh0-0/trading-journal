@@ -20,10 +20,13 @@ public class TradeService {
 
     private final TradeRepository tradeRepository;
     private final UserRepository userRepository;
+    private final ChargeCalculator chargeCalculator;
 
-    public TradeService(TradeRepository tradeRepository, UserRepository userRepository) {
+    public TradeService(TradeRepository tradeRepository, UserRepository userRepository,
+            ChargeCalculator chargeCalculator) {
         this.tradeRepository = tradeRepository;
         this.userRepository = userRepository;
+        this.chargeCalculator = chargeCalculator;
     }
 
     public Page<Trade> getAllTrades(Integer userId, Pageable pageable) {
@@ -37,6 +40,10 @@ public class TradeService {
             throw new RuntimeException("Unauthorized!");
         }
 
+        BigDecimal calculatedCharges = chargeCalculator.calculateDhanEquityDeliveryCharges(trade.getEntryPrice(),
+                trade.getPositionSize(), "BUY");
+
+        trade.setCharges(calculatedCharges);
         trade.setStatus(TradeStatus.ACTIVE);
         trade.setUser(user.get());
 
@@ -55,12 +62,15 @@ public class TradeService {
             throw new RuntimeException("Trade " + tradeId + " is already closed!");
         }
 
+        BigDecimal sellCharges = chargeCalculator.calculateDhanEquityDeliveryCharges(closeRequest.getExitPrice(),
+                trade.getPositionSize(), "SELL");
+
         trade.setExitPrice(closeRequest.getExitPrice());
         trade.setExitDate(closeRequest.getExitDate());
-        trade.setBrokerage(closeRequest.getBrokerage());
+        trade.setCharges(trade.getCharges().add(sellCharges));
 
         BigDecimal pnl = trade.getExitPrice().subtract(trade.getEntryPrice())
-                .multiply(BigDecimal.valueOf(trade.getPositionSize())).subtract(trade.getBrokerage());
+                .multiply(BigDecimal.valueOf(trade.getPositionSize())).subtract(trade.getCharges());
         trade.setPnl(pnl);
 
         if (pnl.compareTo(BigDecimal.ZERO) > 0) {
