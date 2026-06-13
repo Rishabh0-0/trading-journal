@@ -114,8 +114,16 @@ export default function AddTradeModal() {
     };
     
     try {
-      const response = await fetch('http://localhost:8080/api/trades', {
-        method: 'POST',
+      let endpoint = 'http://localhost:8080/api/trades';
+      let method = 'POST';
+
+      if (isAveraging) {
+        endpoint = `http://localhost:8080/api/trades/${tradeModalPrefill.id}/add`;
+        method = 'PUT';
+      }
+
+      const response = await fetch(endpoint, {
+        method: method,
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
@@ -124,7 +132,7 @@ export default function AddTradeModal() {
       });
       
       if (!response.ok) {
-        throw new Error('Failed to add trade');
+        throw new Error(isAveraging ? 'Failed to add position' : 'Failed to add trade');
       }
       
       triggerRefresh();

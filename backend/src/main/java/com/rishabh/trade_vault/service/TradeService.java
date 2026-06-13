@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.rishabh.trade_vault.dto.DashboardStatsDTO;
+import com.rishabh.trade_vault.dto.TradeAddPositionRequestDTO;
 import com.rishabh.trade_vault.dto.TradeCloseRequestDTO;
 import com.rishabh.trade_vault.model.Trade;
 import com.rishabh.trade_vault.model.TradeStatus;
@@ -78,6 +79,34 @@ public class TradeService {
         } else {
             trade.setStatus(TradeStatus.CLOSED_LOSS);
         }
+
+        return tradeRepository.save(trade);
+    }
+
+    public Trade addPosition(Integer userId, Integer tradeId, TradeAddPositionRequestDTO addRequest) {
+        Trade trade = tradeRepository.findById(tradeId)
+                .orElseThrow(() -> new RuntimeException("Trade not found with id: " + tradeId));
+
+        if (!trade.getUser().getId().equals(userId)) {
+            throw new RuntimeException("Unauthorized!");
+        }
+
+        if (!trade.getStatus().equals(TradeStatus.ACTIVE)) {
+            throw new RuntimeException("Trade " + tradeId + " is already closed!");
+        }
+
+        BigDecimal oldTotalValue = trade.getEntryPrice().multiply(new BigDecimal(trade.getPositionSize()));
+        BigDecimal newTotalValue = addRequest.getEntryPrice().multiply(new BigDecimal(addRequest.getPositionSize()));
+        Integer newPositionSize = trade.getPositionSize() + addRequest.getPositionSize();
+        BigDecimal newAveragePrice = oldTotalValue.add(newTotalValue).divide(new BigDecimal(newPositionSize), 2,
+                java.math.RoundingMode.HALF_UP);
+
+        BigDecimal additionalCharges = chargeCalculator.calculateDhanEquityDeliveryCharges(addRequest.getEntryPrice(),
+                addRequest.getPositionSize(), "BUY");
+
+        trade.setEntryPrice(newAveragePrice);
+        trade.setPositionSize(newPositionSize);
+        trade.setCharges(trade.getCharges().add(additionalCharges));
 
         return tradeRepository.save(trade);
     }

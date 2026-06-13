@@ -170,6 +170,7 @@ export default function TradesTable({ data = [] }) {
                           aria-label={`Add position to ${trade.symbol}`}
                           title="Add Position (Average)"
                           onClick={() => openTradeModal({
+                            id: trade.id,
                             symbol: trade.symbol,
                             strategy: trade.strategy,
                             entryPrice: trade.entryPrice,
