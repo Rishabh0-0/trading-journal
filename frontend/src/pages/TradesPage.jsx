@@ -12,7 +12,7 @@ export default function TradesPage() {
   useEffect(() => {
     const token = localStorage.getItem('token');
     
-    fetch("http://localhost:8080/api/trades", {
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/api/trades`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }

@@ -25,7 +25,7 @@ import com.rishabh.trade_vault.service.TradeService;
 import jakarta.validation.Valid;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "${cors.allowed-origins}")
 @RequestMapping("/api/trades")
 public class TradeController {
 

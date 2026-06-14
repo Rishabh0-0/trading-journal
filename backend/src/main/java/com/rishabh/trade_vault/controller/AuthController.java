@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin
+@CrossOrigin(origins = "${cors.allowed-origins}")
 public class AuthController {
 
     private final UserRepository userRepository;

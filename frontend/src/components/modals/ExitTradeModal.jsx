@@ -72,7 +72,7 @@ export default function ExitTradeModal() {
     };
     
     try {
-      const response = await fetch(`http://localhost:8080/api/trades/${exitTradeModalTrade.id}/close`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/trades/${exitTradeModalTrade.id}/close`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

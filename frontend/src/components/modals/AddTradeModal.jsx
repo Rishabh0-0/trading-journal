@@ -114,11 +114,11 @@ export default function AddTradeModal() {
     };
     
     try {
-      let endpoint = 'http://localhost:8080/api/trades';
+      let endpoint = `${import.meta.env.VITE_API_BASE_URL}/api/trades`;
       let method = 'POST';
 
       if (isAveraging) {
-        endpoint = `http://localhost:8080/api/trades/${tradeModalPrefill.id}/add`;
+        endpoint = `${import.meta.env.VITE_API_BASE_URL}/api/trades/${tradeModalPrefill.id}/add`;
         method = 'PUT';
       }
 
