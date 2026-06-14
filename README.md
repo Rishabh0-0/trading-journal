@@ -5,7 +5,7 @@
   <h1>TradeVault</h1>
   <p><strong>A modern, full-stack trading journal engineered for Indian equity traders.</strong></p>
   
-  [![Live Demo](https://img.shields.io/badge/Live_Demo-Vercel-black?style=for-the-badge&logo=vercel)](https://trading-journal-mhm3pasas-rishabh-s-projects3.vercel.app/)
+  [![Live Demo](https://img.shields.io/badge/Live_Demo-Vercel-black?style=for-the-badge&logo=vercel)](https://trading-journal-lilac-beta.vercel.app/)
 </div>
 
 <br />
@@ -37,7 +37,7 @@ TradeVault is a premium, beautifully animated trading journal that automatically
 - **Build Tool:** Maven
 
 ## 🚀 Live Demo
-Experience the application live here: **[TradeVault on Vercel](https://trading-journal-mhm3pasas-rishabh-s-projects3.vercel.app/)**
+Experience the application live here: **[TradeVault on Vercel](https://trading-journal-lilac-beta.vercel.app/)**
 
 ## 💻 Local Development
 
